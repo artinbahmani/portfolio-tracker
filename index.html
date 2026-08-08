@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio Tracker — Crypto</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">◈</span>
+    <h1>Portfolio Tracker</h1>
+  </div>
+  <div class="topbar-right">
+    <span id="status-badge" class="badge badge-muted">connecting…</span>
+    <span id="last-updated" class="muted"></span>
+    <button id="refresh-btn" class="btn" title="Refresh prices now (R)">⟳ Refresh</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== Portfolio summary ===== -->
+  <section class="panel summary-panel">
+    <div class="summary-cards">
+      <div class="stat-card">
+        <div class="stat-label">Total Value</div>
+        <div id="total-value" class="stat-value">$0.00</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total P&amp;L</div>
+        <div id="total-pnl" class="stat-value">$0.00</div>
+        <div id="total-pnl-pct" class="stat-sub muted"></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">24h Change</div>
+        <div id="change-24h" class="stat-value">—</div>
+      </div>
+      <div class="stat-card performer">
+        <div class="stat-label">Top Performer</div>
+        <div id="top-performer" class="stat-value small">—</div>
+      </div>
+      <div class="stat-card performer">
+        <div class="stat-label">Worst Performer</div>
+        <div id="worst-performer" class="stat-value small">—</div>
+      </div>
+    </div>
+    <div class="donut-wrap">
+      <div id="donut" class="donut"></div>
+      <div id="donut-legend" class="donut-legend"></div>
+    </div>
+  </section>
+
+  <!-- ===== Holdings ===== -->
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Holdings</h2>
+    </div>
+
+    <form id="add-form" class="add-form" autocomplete="off">
+      <div class="search-wrap">
+        <input id="coin-search" type="text" placeholder="Search coin (e.g. bitcoin)…" aria-label="Search coin">
+        <div id="search-results" class="search-results hidden"></div>
+        <input id="selected-coin-id" type="hidden">
+      </div>
+      <div id="selected-coin" class="selected-coin muted">no coin selected</div>
+      <input id="amount-input" type="number" min="0" step="any" placeholder="Amount" aria-label="Amount held">
+      <input id="avgbuy-input" type="number" min="0" step="any" placeholder="Avg buy price ($)" aria-label="Average buy price">
+      <button type="submit" class="btn btn-primary">Add Holding</button>
+    </form>
+
+    <div class="table-wrap">
+      <table class="holdings-table">
+        <thead>
+          <tr>
+            <th>Asset</th>
+            <th class="num">Amount</th>
+            <th class="num">Avg Buy</th>
+            <th class="num">Price</th>
+            <th class="num">24h</th>
+            <th class="num">Value</th>
+            <th class="num">Cost Basis</th>
+            <th class="num">P&amp;L</th>
+            <th class="num">P&amp;L %</th>
+            <th>7d</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="holdings-body"></tbody>
+      </table>
+      <div id="holdings-empty" class="empty-state hidden">
+        No holdings yet — search a coin above and add your first position.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Price alerts ===== -->
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Price Alerts</h2>
+      <span id="alert-count" class="badge badge-muted">0 active</span>
+    </div>
+    <form id="alert-form" class="add-form" autocomplete="off">
+      <select id="alert-coin" aria-label="Alert coin"></select>
+      <select id="alert-direction" aria-label="Alert direction">
+        <option value="above">rises above</option>
+        <option value="below">falls below</option>
+      </select>
+      <input id="alert-target" type="number" min="0" step="any" placeholder="Target price ($)" aria-label="Target price">
+      <button type="submit" class="btn btn-primary">Set Alert</button>
+    </form>
+    <ul id="alert-list" class="alert-list"></ul>
+    <div id="alerts-empty" class="empty-state hidden">No alerts set. Alerts trigger against live (or cached) prices.</div>
+  </section>
+
+  <!-- ===== Data import / export ===== -->
+  <section class="panel">
+    <div class="panel-head">
+      <h2>Data</h2>
+    </div>
+    <div class="io-row">
+      <button id="export-btn" class="btn" title="Export holdings as CSV (E)">⤓ Export CSV</button>
+      <label class="btn btn-file" for="import-input">⤒ Import CSV</label>
+      <input id="import-input" type="file" accept=".csv,text/csv" class="hidden">
+      <button id="sample-btn" class="btn">Load demo portfolio</button>
+      <button id="clear-btn" class="btn btn-danger">Clear all data</button>
+    </div>
+    <p class="muted io-note">
+      CSV format: <code>id,symbol,name,amount,avg_buy_price</code> (header row optional).
+      Holdings &amp; alerts persist in localStorage; last prices are cached for offline use.
+    </p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <span>Price data: CoinGecko API (free, no key) · auto-refresh every 60s · graceful offline fallback</span>
+  <span class="keys">Keys: <kbd>R</kbd> refresh · <kbd>E</kbd> export CSV · <kbd>Enter</kbd> add holding</span>
+</footer>
+
+<script src="data.js"></script>
+<script src="charts.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
