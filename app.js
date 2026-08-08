@@ -45,7 +45,8 @@ const $ = id => document.getElementById(id);
    Data loading: live -> cache -> sample
    ============================================================ */
 async function loadMarketData(manual) {
-  setStatus('connecting');
+  dataSource = 'connecting';
+  renderStatus();
   if (manual) $('refresh-btn').disabled = true;
 
   const heldIds = holdings.map(h => h.id);
